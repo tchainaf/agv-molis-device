@@ -21,8 +21,6 @@ Servo mt1;
 Servo mt2;
 HCSR04 hc(TRIG_PIN, ECHO_PIN);
 
-int countStops = 0;
-
 void setup () {
   Serial.begin(9600);
   mt1.attach(MT1_PIN);
@@ -75,7 +73,7 @@ void turnRight()
   analogWrite(EN1_PIN, 0);
   analogWrite(EN2_PIN, 255);
   Serial.println("Direita >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-  delay(10);
+  delay(5);
 }
 
 void turnLeft()
@@ -85,7 +83,7 @@ void turnLeft()
   analogWrite(EN1_PIN, 255);
   analogWrite(EN2_PIN, 0);
   Serial.println("Esquerda <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-  delay(10);
+  delay(5);
 }
 
 void stopMoving(boolean isDistance)
@@ -96,19 +94,16 @@ void stopMoving(boolean isDistance)
     Serial.println("Parado xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     delay(100);
   }
-  else if (countStops == 3) {
+  else {
     analogWrite(EN1_PIN, 0);
     analogWrite(EN2_PIN, 0);
     Serial.println("Parado xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-    delay(3000);
-    moveFoward();
-    delay(20);
-    countStops = 0;
-  }
-  else {
-    countStops += 1;
-    Serial.print(countStops);
-    Serial.println("º posto sem parada");
-    moveFoward();
+    delay(1000);
+    mt1.write(0);
+    mt2.write(180);
+    analogWrite(EN1_PIN, 255);
+    analogWrite(EN2_PIN, 255);
+    Serial.println("Frente -------------------------------------------");
+    delay(300);
   }
 }
